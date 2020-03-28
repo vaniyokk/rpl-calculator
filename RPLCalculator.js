@@ -1,10 +1,10 @@
 const readline = require('readline');
-import { calculateRPL, validateRPL } from './lib/rpl'
+import { calculateRPL } from './lib/rpl'
 import { 
     STARTUP_TEXT, 
     EXIT_TEXT, 
-    EXIT_SYMBOL, 
-    VALID_INPUT_REGEXP 
+    EXIT_SYMBOL,
+    RESET_SYMBOL
 } from './config'
 
 export default class RPLCalculator {
@@ -25,18 +25,18 @@ export default class RPLCalculator {
 
     onInput(input) {
         const trimmedInput = input.trim();
+
+        if(trimmedInput === EXIT_SYMBOL) {
+            this.io.close();
+        } else if(trimmedInput === RESET_SYMBOL) {
+            this.reset()
+            return;
+        }
+
         try {
-            if(trimmedInput === EXIT_SYMBOL) {
-                this.io.close();
-            }
-
-            if(!trimmedInput.match(VALID_INPUT_REGEXP)) {
-                throw new Error('Check your input and try again from scratch!\n')
-            }
-
             this.inputStack = this.inputStack.concat(trimmedInput.split(' '));
         
-            if(validateRPL(this.inputStack)) {
+            if('+-/*'.indexOf(this.inputStack[this.inputStack.length - 1]) !== -1) {
                 this.calculate()
             } else {
                 console.log(trimmedInput);
@@ -62,5 +62,6 @@ export default class RPLCalculator {
 
     reset() {
         this.inputStack = [];
+        this.io.prompt();
     }
 }
