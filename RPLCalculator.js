@@ -4,7 +4,8 @@ import {
     STARTUP_TEXT, 
     EXIT_TEXT, 
     EXIT_SYMBOL,
-    RESET_SYMBOL
+    RESET_SYMBOL,
+    VALID_INPUT_REGEXP
 } from './config'
 
 export default class RPLCalculator {
@@ -23,17 +24,20 @@ export default class RPLCalculator {
         this.io.prompt();
     }
 
+
     onInput(input) {
         const trimmedInput = input.trim();
 
-        if(trimmedInput === EXIT_SYMBOL) {
-            this.io.close();
-        } else if(trimmedInput === RESET_SYMBOL) {
-            this.reset()
-            return;
-        }
-
         try {
+            if(trimmedInput === EXIT_SYMBOL) {
+                this.io.close();
+            } else if(trimmedInput === RESET_SYMBOL) {
+                this.reset()
+                return;
+            } else if(!trimmedInput.match(VALID_INPUT_REGEXP)) {
+                throw new Error('Syntax error! Check your input and try again from scratch!\n')
+            }
+
             this.inputStack = this.inputStack.concat(trimmedInput.split(' '));
         
             if('+-/*'.indexOf(this.inputStack[this.inputStack.length - 1]) !== -1) {
