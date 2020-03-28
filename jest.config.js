@@ -1,6 +1,10 @@
 module.exports = {
     testPathIgnorePatterns: [
         "/node_modules/",
-        "/dist/"
+        "/dist/",
+        "__mocks__"
+    ],
+    modulePathIgnorePatterns: [
+        "<rootDir>/dist"
     ]
 }

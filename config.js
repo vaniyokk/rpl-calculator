@@ -7,11 +7,14 @@ operands and operators one by one.
 Enter 'q' or press Ctrl+D to exit. 
 -------------------------------------------------------------
 `
-const EXIT_TEXT = 'Good Bye!';
+const EXIT_TEXT = '\nGood Bye!';
 const EXIT_SYMBOL = 'q';
+const VALID_INPUT_REGEXP = /[\d\s\+\-\*\/\.]+/
+
 
 export {
     STARTUP_TEXT,
     EXIT_TEXT,
-    EXIT_SYMBOL
+    EXIT_SYMBOL,
+    VALID_INPUT_REGEXP
 }
