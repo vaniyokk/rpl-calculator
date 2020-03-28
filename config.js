@@ -9,7 +9,7 @@ Enter 'q' or press Ctrl+D to exit.
 `
 const EXIT_TEXT = '\nGood Bye!';
 const EXIT_SYMBOL = 'q';
-const VALID_INPUT_REGEXP = /[\d\s\+\-\*\/\.]+/
+const VALID_INPUT_REGEXP = /^[\d\s\+\-\*\/\.]+$/
 
 
 export {

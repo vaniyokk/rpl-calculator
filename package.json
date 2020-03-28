@@ -1,7 +1,7 @@
 {
-  "name": "calc-app",
+  "name": "rpl-calculator",
   "version": "1.0.0",
-  "description": "Simple CLI calculator",
+  "description": "Simple CLI RPL calculator",
   "main": "index.js",
   "scripts": {
     "test": "jest --collect-coverage",
