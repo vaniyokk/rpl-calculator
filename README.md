@@ -1,4 +1,4 @@
-# calc-app - simple CLI reverse polish notation calculator
+# rpl-calculator - simple CLI reverse polish notation calculator
 
 ## Installation
 1. Install node.js
@@ -74,12 +74,13 @@ $ npm run lint
 ## Architecture concepts
 - validation has 2 stages: per-input stage and calculaton stage. First stage checks user input with regular expression (allows control characters and math expressions). First stage validation doesn't guarantee that whole expression is valid because it's not completed. Second stage is performed when stack is being processed and calculated. 
 - calculation starts when user input ends with any supported operator and total operator count in expression is one less than operands count
-- Big.js library is used to prevent decimal error in calculations
+- **big.js** library is used to perform calculations to avoid floating point accuracy error
 - calculator function extracted from main app to better testability and separation of concerns
 - Babel transpilation is done to allow ES module import and allow usage of all new JS language features
 - ESlint used to ensure code quality rules
 
 ## TODO list:
-- recover from input errors without previously entered data loss
-- abstract output
-- enable lint before commit
+- [x] use accurate math for calculations
+- [ ] recover from input errors without previously entered data loss
+- [ ] abstract and separate UI output
+- [ ] enable lint before commit
