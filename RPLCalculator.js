@@ -1,4 +1,5 @@
 import { Operations, calculateRPL } from './lib/rpl';
+import print from './helpers';
 import {
   STARTUP_TEXT,
   EXIT_TEXT,
@@ -19,15 +20,10 @@ export default class RPLCalculator {
     this.inputStack = [];
   }
 
-  static shutDown() {
-    console.log(EXIT_TEXT);
-    process.exit(0);
-  }
-
   start() {
-    console.log(STARTUP_TEXT);
+    print(STARTUP_TEXT);
     this.io.on('line', this.onInput.bind(this));
-    this.io.on('close', RPLCalculator.shutDown);
+    this.io.on('close', this.onClose.bind(this));
     this.io.prompt();
   }
 
@@ -40,11 +36,16 @@ export default class RPLCalculator {
       }
       this.handleValidInput(trimmedInput);
     } catch (e) {
-      console.log(`ERROR: ${e.message}`);
+      print(`ERROR: ${e.message}`);
       this.reset();
     } finally {
       this.io.prompt();
     }
+  }
+
+  onClose() {
+    print(EXIT_TEXT);
+    process.exit(0);
   }
 
   /**
@@ -59,6 +60,7 @@ export default class RPLCalculator {
     const isLastSymbolAnOperator = Object.values(Operations).join('').indexOf(lastSymbol) !== -1;
     const isOperatorsCountMatchOperands = this.inputStack.length > 1
       && this.inputStack.reduce(readyReducer, 0) === 1;
+
     return isLastSymbolAnOperator && isOperatorsCountMatchOperands;
   }
 
@@ -72,21 +74,25 @@ export default class RPLCalculator {
 
     this.inputStack = this.inputStack.concat(trimmedInput.split(' '));
 
+    let response = '';
+
     if (this.isStackReadyToCalculate()) {
-      this.calculate();
+      response = this.calculateAndRemember();
     } else {
-      console.log(trimmedInput);
+      response = trimmedInput;
     }
+
+    print(response);
   }
 
-  calculate() {
+  calculateAndRemember() {
     const result = calculateRPL(this.inputStack.join(' '));
     this.inputStack = [result];
-    console.log(result);
+    return result;
   }
 
   reset() {
     this.inputStack = [];
-    console.log(DIVIDER);
+    print(DIVIDER);
   }
 }

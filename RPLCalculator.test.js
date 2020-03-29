@@ -1,14 +1,16 @@
 import RPLCalculator from './RPLCalculator';
 import { EXIT_SYMBOL, RESET_SYMBOL, DIVIDER } from './config';
+import mockPrint from './helpers';
 
 jest.mock('readline');
-const mockReadline = require('readline');
+jest.mock('./helpers');
 
-const mockLog = jest.spyOn(console, 'log').mockImplementation(() => {});
+const mockReadline = require('readline');
 
 let calc = null;
 beforeEach(() => {
   calc = new RPLCalculator(null, null);
+  mockPrint.mockReset();
 });
 
 it('is properly initialized on construction', () => {
@@ -36,7 +38,7 @@ it('is closes if receives exit symbol as input', () => {
 
 it('shuts down gracefully when closed', () => {
   const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {});
-  calc.constructor.shutDown();
+  calc.onClose();
   expect(mockExit).toHaveBeenCalledWith(0);
   mockExit.mockRestore();
 });
@@ -48,7 +50,7 @@ it('resets when input not passing regexp check', () => {
 });
 
 it('perform calculation when stack is ready', () => {
-  const mockCalculate = jest.spyOn(calc, 'calculate');
+  const mockCalculate = jest.spyOn(calc, 'calculateAndRemember');
   calc.inputStack = ['5'];
   calc.onInput('6 +');
   expect(mockCalculate).toHaveBeenCalled();
@@ -60,10 +62,10 @@ it('ask for new input when stack is not ready yet', () => {
   expect(calc.io.prompt).toHaveBeenCalledTimes(2);
 });
 
-it('resets after calculation is done', () => {
+it('remembers calculation result for use', () => {
   calc.inputStack = ['5', '5', '+'];
-  calc.calculate();
-  expect(mockLog).toHaveBeenCalledWith(10);
+  calc.calculateAndRemember();
+  expect(calc.inputStack[0]).toEqual(10);
 });
 
 it('resets when user enter reset symbol', () => {
@@ -71,6 +73,6 @@ it('resets when user enter reset symbol', () => {
   const mockReset = jest.spyOn(calc, 'reset');
   calc.onInput(RESET_SYMBOL);
   expect(handleValidInput).toHaveBeenCalled();
-  expect(mockLog).toHaveBeenCalledWith(DIVIDER);
+  expect(mockPrint).toHaveBeenCalledWith(DIVIDER);
   expect(mockReset).toHaveBeenCalled();
 });
