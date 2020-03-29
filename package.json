@@ -4,6 +4,7 @@
   "description": "Simple CLI RPL calculator",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint --fix --ext .js --ignore-path .gitignore .",
     "test": "jest --collect-coverage",
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules",
     "start": "npm run --silent --no-progress build && node dist/index.js"
@@ -16,9 +17,17 @@
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
     "@babel/preset-env": "^7.9.0",
-    "babel-jest": "^25.2.3",
-    "jest": "^25.2.3",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^25.2.4",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jest": "^23.8.2",
+    "jest": "^25.2.4",
+    "jest-cli": "^25.2.4",
     "rimraf": "^3.0.2"
   }
 }
